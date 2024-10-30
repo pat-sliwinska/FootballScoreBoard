@@ -14,21 +14,23 @@ public class InMemoryGameRepository implements GameRepository {
 
     @Override
     public void addGame(Game game) {
-
+        games.add(game);
     }
 
     @Override
     public void updateGameScore(Game game, int homeScore, int awayScore) {
-
+        game.setHomeScore(homeScore);
+        game.setAwayScore(awayScore);
     }
 
     @Override
     public void removeGame(Game game) {
-
+        games.remove(game);
     }
 
     @Override
     public List<Game> getGames() {
-        return List.of();
+        return new ArrayList<>(games);
     }
+
 }

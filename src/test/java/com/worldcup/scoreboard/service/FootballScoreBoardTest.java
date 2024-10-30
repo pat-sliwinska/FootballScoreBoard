@@ -2,6 +2,7 @@ package com.worldcup.scoreboard.service;
 
 import com.worldcup.scoreboard.model.Game;
 import com.worldcup.scoreboard.repository.GameRepository;
+import com.worldcup.scoreboard.repository.InMemoryGameRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -16,6 +17,7 @@ public class FootballScoreBoardTest {
 
     @BeforeEach
     void setUp() {
+        gameRepository = new InMemoryGameRepository();
         footballScoreBoard = new FootballScoreBoard(gameRepository);
     }
 
