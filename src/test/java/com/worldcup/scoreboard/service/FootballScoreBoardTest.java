@@ -1,5 +1,6 @@
 package com.worldcup.scoreboard.service;
 
+import com.worldcup.scoreboard.exception.GameNotExistException;
 import com.worldcup.scoreboard.model.Game;
 import com.worldcup.scoreboard.repository.GameRepository;
 import com.worldcup.scoreboard.repository.InMemoryGameRepository;
@@ -18,7 +19,7 @@ public class FootballScoreBoardTest {
     @BeforeEach
     void setUp() {
         gameRepository = new InMemoryGameRepository();
-        footballScoreBoard = new FootballScoreBoard(gameRepository);
+        footballScoreBoard = new FootballScoreBoard(gameRepository, new ScoreBoardValidator());
     }
 
     @Test
@@ -75,12 +76,12 @@ public class FootballScoreBoardTest {
     }
 
     @Test
-    void shouldThrowExceptionWhenFinishingNonExistentGame() {
+    void shouldThrowExceptionWhenFinishingNonExistingGame() {
         // given
-        Game nonExistentGame = new Game("Mexico", "Canada");
+        Game nonExistingGame = new Game("Mexico", "Canada");
 
         // when, then
-        assertThrows(IllegalArgumentException.class, () -> footballScoreBoard.finishGame(nonExistentGame));
+        assertThrows(GameNotExistException.class, () -> footballScoreBoard.finishGame(nonExistingGame));
     }
 
     @Test
@@ -92,7 +93,7 @@ public class FootballScoreBoardTest {
         footballScoreBoard.finishGame(game);
 
         // then
-        assertThrows(IllegalArgumentException.class, () -> footballScoreBoard.finishGame(game));
+        assertThrows(GameNotExistException.class, () -> footballScoreBoard.finishGame(game));
     }
 
 
@@ -128,12 +129,12 @@ public class FootballScoreBoardTest {
     }
 
     @Test
-    void shouldThrowExceptionWhenUpdatingScoreForNonExistentGame() {
+    void shouldThrowExceptionWhenUpdatingScoreForNonExistingGame() {
         // given
         Game nonExistingGame = new Game("Mexico", "Canada");
 
         // when, then
-        assertThrows(IllegalArgumentException.class, () -> footballScoreBoard.updateScore(nonExistingGame, 1, 1));
+        assertThrows(GameNotExistException.class, () -> footballScoreBoard.updateScore(nonExistingGame, 1, 1));
     }
 
     @Test
@@ -145,7 +146,7 @@ public class FootballScoreBoardTest {
         footballScoreBoard.finishGame(game);
 
         // then
-        assertThrows(IllegalArgumentException.class, () -> footballScoreBoard.updateScore(game, 1, 1));
+        assertThrows(GameNotExistException.class, () -> footballScoreBoard.updateScore(game, 1, 1));
     }
 
 

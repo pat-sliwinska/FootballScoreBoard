@@ -9,13 +9,16 @@ import java.util.stream.Collectors;
 
 public class FootballScoreBoard implements ScoreBoard {
     private final GameRepository gameRepository;
+    private final ScoreBoardValidator validator;
 
-    public FootballScoreBoard(GameRepository gameRepository) {
+    public FootballScoreBoard(GameRepository gameRepository, ScoreBoardValidator validator) {
         this.gameRepository = gameRepository;
+        this.validator = validator;
     }
 
     @Override
     public Game startGame(String homeTeam, String awayTeam) {
+        validator.validateTeamNames(homeTeam, awayTeam);
         Game game = new Game(homeTeam, awayTeam);
         gameRepository.addGame(game);
         return game;
@@ -23,11 +26,14 @@ public class FootballScoreBoard implements ScoreBoard {
 
     @Override
     public void finishGame(Game game) {
+        validator.validateGameExists(game, gameRepository.getGames());
         gameRepository.removeGame(game);
     }
 
     @Override
     public void updateScore(Game game, int homeScore, int awayScore) {
+        validator.validateGameExists(game, gameRepository.getGames());
+        validator.validateScores(homeScore, awayScore);
         gameRepository.updateGameScore(game, homeScore, awayScore);
     }
 
